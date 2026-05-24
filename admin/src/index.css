@@ -1,0 +1,79 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@theme {
+  --radius-lg: 1.5rem;
+  --radius-md: 1rem;
+  --radius-sm: 0.5rem;
+
+  /* Custom HSL Palette - Explore Pakistan */
+  --color-primary: hsl(158, 64%, 15%);
+  --color-primary-foreground: hsl(40, 20%, 98%);
+  
+  --color-secondary: hsl(145, 63%, 42%);
+  --color-secondary-foreground: hsl(0, 0%, 100%);
+
+  --color-accent: hsl(38, 75%, 55%);
+  --color-accent-foreground: hsl(158, 64%, 10%);
+
+  --color-background: hsl(40, 20%, 98%);
+  --color-foreground: hsl(158, 64% ,8%);
+  
+  --color-card: hsl(0, 0%, 100%);
+  --color-card-foreground: hsl(158, 64%, 8%);
+
+  --color-border: hsl(158, 20%, 90%);
+  --color-input: hsl(158, 20%, 90%);
+  --color-ring: hsl(145, 63%, 42%);
+}
+
+@layer base {
+  @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&family=Plus+Jakarta+Sans:wght@300;400;500;600;700&display=swap');
+
+  html {
+    scroll-behavior: smooth;
+    font-family: 'Plus Jakarta Sans', sans-serif;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    font-family: 'Outfit', sans-serif;
+    letter-spacing: -0.02em;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    background-image: 
+      radial-gradient(circle at 10% 20%, rgba(39, 176, 110, 0.04) 0%, transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(225, 161, 56, 0.03) 0%, transparent 45%);
+    background-attachment: fixed;
+    min-height: 100vh;
+  }
+
+  * {
+    @apply border-border;
+  }
+
+  ::selection {
+    @apply bg-secondary/20 text-primary;
+  }
+}
+
+@layer utilities {
+  /* Modern Glassmorphism Cards */
+  .glass-card {
+    background: rgba(255, 255, 255, 0.75);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.4);
+    box-shadow: 0 8px 32px 0 rgba(14, 58, 47, 0.04);
+  }
+
+  /* Shimmer / Glow Effects */
+  .glow-hover {
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+  .glow-hover:hover {
+    box-shadow: 0 0 25px rgba(39, 176, 110, 0.35);
+    transform: translateY(-2px);
+  }
+}
