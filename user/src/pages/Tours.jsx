@@ -35,15 +35,6 @@ const Tour = () => {
     fetchTours();
   }, []);
 
-  const handleBookTour = (tour) => {
-    navigate("/booktour", {
-      state: {
-        id: tour._id,
-        title: tour.title,
-        price: tour.price
-      }
-    });
-  };
 
 
 
@@ -72,7 +63,7 @@ const Tour = () => {
         {tours.filter(tour => tour.status === 'upcoming' || tour.status === 'available').length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {tours.filter(tour => tour.status === 'upcoming' || tour.status === 'available').map(tour => (
-              <TourCard key={tour._id} tour={tour} onBookTour={handleBookTour} />
+              <TourCard key={tour._id} tour={tour} />
             ))}
           </div>
         ) : (
@@ -93,7 +84,7 @@ const Tour = () => {
         {tours.filter(tour => tour.status === 'recent').length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {tours.filter(tour => tour.status === 'recent').map(tour => (
-              <TourCard key={tour._id} tour={tour} onBookTour={handleBookTour} />
+              <TourCard key={tour._id} tour={tour} />
             ))}
           </div>
         ) : (

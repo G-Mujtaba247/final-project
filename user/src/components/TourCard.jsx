@@ -101,13 +101,15 @@ const TourCard = ({ tour, onBookTour }) => {
           </div>
         </div>
 
-        <Button
-          onClick={() => onBookTour(tour)}
-          className="w-full bg-primary hover:bg-secondary text-white h-12 rounded-2xl font-semibold transition-all duration-300 shadow-md hover:shadow-xl flex items-center justify-center gap-2 cursor-pointer group/btn"
-        >
-          Book Adventure
-          <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1" />
-        </Button>
+        {onBookTour && (
+          <Button
+            onClick={() => onBookTour(tour)}
+            className="w-full bg-primary hover:bg-secondary text-white h-12 rounded-2xl font-semibold transition-all duration-300 shadow-md hover:shadow-xl flex items-center justify-center gap-2 cursor-pointer group/btn"
+          >
+            Book Adventure
+            <ArrowUpRight className="w-4 h-4 transition-transform duration-300 group-hover/btn:translate-x-1 group-hover/btn:-translate-y-1" />
+          </Button>
+        )}
       </CardContent>
     </Card>
   );

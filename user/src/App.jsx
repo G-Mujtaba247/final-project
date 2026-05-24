@@ -24,8 +24,11 @@ const App = () => {
         <Route path="/about" element={<About />} />
         <Route path="/tours" element={<Tours />} />
 
-        <Route path="/booking" element={<Booking />} />
-        <Route path="/booktour" element={<BookTour />} />
+        {/* Protected Booking Routes */}
+        <Route element={<ProtectedRoute />}>
+          <Route path="/booking" element={<Booking />} />
+          <Route path="/booktour" element={<BookTour />} />
+        </Route>
 
         <Route path="/contact" element={<Contact />} />
         <Route path="/policies" element={<Policies />} />

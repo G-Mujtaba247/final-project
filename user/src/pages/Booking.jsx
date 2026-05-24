@@ -74,7 +74,7 @@ const Booking = () => {
               <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-green-500/30 border-t-green-600" />
               <p className="mt-4 text-sm text-slate-600">Loading tours...</p>
             </div>
-          ) : !tours.length ? (
+          ) : !tours.filter(tour => tour.status === 'available').length ? (
             <div className="mt-12 rounded-[2rem] border border-dashed border-slate-300 bg-white/90 px-8 py-16 text-center shadow-lg">
               <p className="text-sm uppercase tracking-[0.3em] text-slate-500">No tours available</p>
               <h3 className="mt-4 text-2xl font-semibold text-slate-950">We're updating our tour list.</h3>
@@ -83,7 +83,7 @@ const Booking = () => {
             </div>
           ) : (
             <div className="grid gap-8 sm:grid-cols-1 md:grid-cols-2 xl:grid-cols-3 mt-8">
-              {tours.map((tour, index) => (
+              {tours.filter(tour => tour.status === 'available').map((tour, index) => (
                 <TourCard
                   key={tour._id || index}
                   tour={tour}
