@@ -12,6 +12,7 @@ import {
   CardContent,
   CardFooter,
 } from "@/components/ui/card";
+import WebLayout from "../../layout/WebLayout";
 
 const BookTour = () => {
   const navigate = useNavigate();
@@ -187,8 +188,9 @@ const BookTour = () => {
   };
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.16),transparent_40%),radial-gradient(circle_at_bottom,_rgba(20,184,166,0.08),transparent_38%)] pt-28 pb-16 px-4">
-      <div className="mx-auto max-w-6xl">
+    <WebLayout>
+      <div className="min-h-screen pt-28 pb-16 px-4">
+        <div className="mx-auto max-w-6xl">
         <div className="mb-10 text-center">
           <p className="text-sm uppercase tracking-[0.32em] text-emerald-600 font-semibold">Fast, easy, secure</p>
           <h1 className="mt-4 text-4xl md:text-5xl font-extrabold text-slate-950">Book Your Next Pakistan Escape</h1>
@@ -356,6 +358,7 @@ const BookTour = () => {
         </Card>
       </div>
     </div>
+    </WebLayout>
   );
 };
 

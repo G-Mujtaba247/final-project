@@ -63,7 +63,17 @@ const Tour = () => {
         {tours.filter(tour => tour.status === 'upcoming' || tour.status === 'available').length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {tours.filter(tour => tour.status === 'upcoming' || tour.status === 'available').map(tour => (
-              <TourCard key={tour._id} tour={tour} />
+              <TourCard 
+                key={tour._id} 
+                tour={tour} 
+                onBookTour={(selectedTour) => navigate("/booktour", {
+                  state: {
+                    id: selectedTour._id,
+                    title: selectedTour.title,
+                    price: selectedTour.price
+                  }
+                })}
+              />
             ))}
           </div>
         ) : (

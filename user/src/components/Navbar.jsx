@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   NavigationMenu,
   NavigationMenuItem,
@@ -9,6 +9,8 @@ import { cn } from "@/lib/utils";
 import { NavLink, useNavigate } from "react-router";
 import { Button } from "./ui/button";
 import { Menu, X } from "lucide-react";
+import axios from "axios";
+import { GET_WEBPAGES } from "../resources/server-API";
 
 const Navbar = () => {
   const [open, setOpen] = useState(false);
@@ -16,7 +18,28 @@ const Navbar = () => {
   const userString = localStorage.getItem("user");
   const user = userString ? JSON.parse(userString) : null;
   const userName = user?.name ? user.name.split(" ")[0] : null;
-  const dynamicPages = []; // TODO: fetch dynamic pages from server
+  const [dynamicPages, setDynamicPages] = useState([]);
+
+  useEffect(() => {
+    const fetchPages = async () => {
+      try {
+        const response = await axios.get(GET_WEBPAGES);
+        if (response.data.status) {
+          // Filter out "Our Services" and "services" pages
+          const filtered = response.data.webpages.filter(
+            (page) => 
+              page.slug !== "our-services" && 
+              page.slug !== "services" && 
+              !page.title.toLowerCase().includes("services")
+          );
+          setDynamicPages(filtered);
+        }
+      } catch (error) {
+        console.error("Error fetching dynamic pages for Navbar:", error);
+      }
+    };
+    fetchPages();
+  }, []);
 
   const handleLogout = () => {
     localStorage.removeItem("user");
@@ -171,6 +194,20 @@ const Navbar = () => {
               )}
             >
               {item.label}
+            </NavLink>
+          ))}
+
+          {dynamicPages.map((page) => (
+            <NavLink
+              key={page.slug}
+              to={`/${page.slug}`}
+              onClick={() => setOpen(false)}
+              className={({ isActive }) => cn(
+                "block rounded-xl px-4 py-3 text-base font-semibold text-slate-700 hover:bg-secondary/10 hover:text-primary transition-all duration-200",
+                isActive ? "bg-secondary/15 text-primary font-bold shadow-sm" : ""
+              )}
+            >
+              {page.title}
             </NavLink>
           ))}
 

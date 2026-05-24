@@ -3,6 +3,7 @@ export const UPLOADS_HOST = import.meta.env.VITE_UPLOADS_URL || "https://explore
 
 // Webpage
 export const DETAIL_WEBPAGE = `${HOST}/website/webpage`;
+export const GET_WEBPAGES = `${HOST}/website/webpages`;
 
 // Auth
 export const LOGIN_USER = `${HOST}/user/login`;
