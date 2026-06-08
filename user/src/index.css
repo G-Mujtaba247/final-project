@@ -42,11 +42,22 @@
 
   body {
     @apply bg-background text-foreground antialiased;
+    background-color: var(--color-background);
     background-image: 
-      radial-gradient(circle at 10% 20%, rgba(39, 176, 110, 0.04) 0%, transparent 40%),
-      radial-gradient(circle at 90% 80%, rgba(225, 161, 56, 0.03) 0%, transparent 45%);
+      radial-gradient(circle at 15% 50%, hsla(145, 63%, 42%, 0.12), transparent 45%),
+      radial-gradient(circle at 85% 30%, hsla(158, 64%, 15%, 0.1), transparent 45%),
+      radial-gradient(circle at 50% 80%, hsla(38, 75%, 55%, 0.1), transparent 45%),
+      radial-gradient(circle at 80% 90%, hsla(145, 63%, 42%, 0.08), transparent 45%);
+    background-size: 150% 150%;
+    animation: ambient-gradient 20s ease-in-out infinite alternate;
     background-attachment: fixed;
     min-height: 100vh;
+  }
+
+  @keyframes ambient-gradient {
+    0% { background-position: 0% 0%; }
+    50% { background-position: 100% 100%; }
+    100% { background-position: 0% 100%; }
   }
 
   * {
