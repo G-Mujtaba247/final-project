@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router";
 import { ArrowLeft, Mail, Lock, Eye, EyeOff } from "lucide-react";
@@ -13,6 +13,30 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+
+  // Handle Google OAuth redirect: read token & user from URL query params
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+    const user = params.get("user");
+    const oauthError = params.get("error");
+
+    if (oauthError) {
+      setError("Google sign-in failed. Please try again.");
+      return;
+    }
+
+    if (token && user) {
+      try {
+        localStorage.setItem("token", token);
+        localStorage.setItem("user", decodeURIComponent(user));
+        navigate("/");
+        window.location.reload();
+      } catch {
+        setError("Something went wrong during Google sign-in.");
+      }
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -126,6 +150,27 @@ const Login = () => {
             >
               {isLoading ? "Signing in..." : "Login (لاگ ان)"}
             </button>
+
+            {/* Divider */}
+            <div className="flex items-center gap-3 my-2">
+              <div className="flex-1 h-px bg-gray-200" />
+              <span className="text-xs text-gray-400 font-medium">OR</span>
+              <div className="flex-1 h-px bg-gray-200" />
+            </div>
+
+            {/* Google OAuth Button */}
+            <a
+              href={`${HOST}/auth/google`}
+              className="w-full flex items-center justify-center gap-3 border border-gray-300 bg-white hover:bg-gray-50 text-gray-700 font-semibold py-3 rounded-md transition duration-200 shadow-sm"
+            >
+              <svg width="20" height="20" viewBox="0 0 48 48" xmlns="http://www.w3.org/2000/svg">
+                <path fill="#EA4335" d="M24 9.5c3.14 0 5.95 1.08 8.17 2.85l6.09-6.09C34.46 3.19 29.53 1 24 1 14.82 1 7.07 6.48 3.69 14.27l7.1 5.52C12.52 13.37 17.82 9.5 24 9.5z"/>
+                <path fill="#4285F4" d="M46.5 24.5c0-1.64-.15-3.22-.42-4.75H24v9h12.7c-.55 2.96-2.2 5.47-4.69 7.17l7.19 5.59C43.36 37.57 46.5 31.45 46.5 24.5z"/>
+                <path fill="#FBBC05" d="M10.79 28.21A14.5 14.5 0 0 1 9.5 24c0-1.46.25-2.88.69-4.21l-7.1-5.52A23.93 23.93 0 0 0 0 24c0 3.87.93 7.53 2.57 10.77l8.22-6.56z"/>
+                <path fill="#34A853" d="M24 47c5.53 0 10.17-1.84 13.56-4.99l-7.19-5.59C28.61 37.9 26.41 38.5 24 38.5c-6.18 0-11.42-3.87-13.21-9.29l-8.22 6.56C6.96 41.46 14.74 47 24 47z"/>
+              </svg>
+              Continue with Google
+            </a>
           </form>
 
           <div className="mt-8 border-dashed border-2 border-green-500 rounded-lg p-4 text-center bg-transparent">
