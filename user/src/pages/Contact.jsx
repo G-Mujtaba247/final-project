@@ -91,10 +91,10 @@ export default function Contact() {
   return (
     <WebLayout>
       {/* ======================= HERO BANNER ======================= */}
-      <section className="relative w-full h-[460px] overflow-hidden bg-white-100">
+      <section className="relative w-full h-[350px] md:h-[460px] overflow-hidden bg-white">
         <img
           src="Safety.webp"
-          className="absolute inset-0 mt-20 w-500 h-170 object-cover"
+          className="absolute inset-0 mt-20 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-black/70"></div>
 
@@ -109,9 +109,9 @@ export default function Contact() {
       </section>
 
       {/* ======================= CONTACT & FORM ======================= */}
-      <section className="container m-auto  pl-8 pr-8 py-20 grid grid-cols-1 lg:grid-cols-2 gap-14">
+      <section className="container mx-auto px-4 md:px-8 py-12 md:py-20 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14">
         {/* Left Cards */}
-        <div className="space-y-6 ">
+        <div className="space-y-6">
           {/* Card Template */}
           {[
             { icon: Mail, title: "Email Us", value: contactData.email },

@@ -8,6 +8,39 @@ import TravelDeals from "../components/TravelDeals";
 import { useNavigate } from "react-router";
 import TourCard from "../components/TourCard";
 
+const FALLBACK_TOURS = [
+  {
+    _id: "fallback-1",
+    title: "Northern Peaks Explorer",
+    description: "A scenic 5-day journey through Gilgit-Baltistan with mountain views, cultural villages, and lakeside camps.",
+    image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
+    status: "available",
+    price: 38000,
+    duration: "5 Days",
+    startDate: "2025-11-05",
+  },
+  {
+    _id: "fallback-2",
+    title: "Lahore Heritage Tour",
+    description: "Explore Lahore's iconic monuments, Mughal architecture, and famous food streets on a relaxed 3-day city trip.",
+    image: "https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=900&q=80",
+    status: "available",
+    price: 19500,
+    duration: "3 Days",
+    startDate: "2025-10-20",
+  },
+  {
+    _id: "fallback-3",
+    title: "Karachi Coastal Escape",
+    description: "A coastal weekend retreat with beach strolls, seafood dining, and modern city highlights.",
+    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80",
+    status: "available",
+    price: 22000,
+    duration: "4 Days",
+    startDate: "2025-12-10",
+  },
+];
+
 const Booking = () => {
   const [tours, setTours] = useState([]);
   const [loading, setLoading] = useState(true);
