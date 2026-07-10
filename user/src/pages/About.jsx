@@ -128,7 +128,7 @@ const About = () => {
                     </div>
                 </section>
 
-                <div className="container mx-auto pl-8 pr-8 py-16 md:py-24 space-y-24">
+                <div className="container mx-auto px-4 md:px-8 py-16 md:py-24 space-y-24">
                     {/* Our Story / Intro */}
                     <section className="grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
                         <div className="space-y-6">
@@ -244,7 +244,7 @@ const About = () => {
                                 Our expert guides are ready to take you on an unforgettable journey through Pakistan.
                             </p>
                         </div>
-                        <div className="px-12">
+                        <div className="px-4 md:px-12">
                             <Carousel opts={{ align: "start", loop: true }} className="w-full">
                                 <CarouselContent>
                                     {team.map((member, index) => (

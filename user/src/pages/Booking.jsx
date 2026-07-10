@@ -59,14 +59,16 @@ const Booking = () => {
           headers: { Authorization: `Bearer ${token}` }
         });
 
-        if (res.data.status) {
+        if (res.data.status && Array.isArray(res.data.tours) && res.data.tours.length) {
           setTours(res.data.tours);
         } else {
-          setError(res.data.message || "Unable to load tours at the moment.");
+          setTours(FALLBACK_TOURS);
+          setError(res.data.message || "Unable to load tours from server; showing sample tours instead.");
         }
       } catch (error) {
         console.error("Failed to fetch tours:", error);
-        setError("Unable to load tours. Please refresh the page.");
+        setTours(FALLBACK_TOURS);
+        setError("Unable to load tours. Showing sample tours instead.");
       } finally {
         setLoading(false);
       }
@@ -81,7 +83,7 @@ const Booking = () => {
     <WebLayout>
       <div className="min-h-screen bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.12),transparent_40%),radial-gradient(circle_at_bottom,_rgba(14,165,233,0.08),transparent_38%)] text-foreground pb-20 px-4">
 
-        <section className="mx-auto max-w-6xl overflow-hidden rounded-[2rem] bg-gradient-to-r from-emerald-600 via-cyan-600 to-sky-500 px-8 py-16 text-white shadow-2xl">
+        <section className="mx-auto max-w-6xl overflow-hidden rounded-[2rem] bg-gradient-to-r from-emerald-600 via-cyan-600 to-sky-500 px-4 sm:px-8 py-10 sm:py-16 text-white shadow-2xl">
           <div className="max-w-3xl">
             <p className="text-sm uppercase tracking-[0.3em] text-emerald-200 font-semibold mb-4">Your next adventure starts here</p>
             <h1 className="text-4xl md:text-5xl font-bold tracking-tight">Book the perfect tour across Pakistan in minutes</h1>

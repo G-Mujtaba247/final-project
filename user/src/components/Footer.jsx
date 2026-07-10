@@ -42,7 +42,7 @@ const Footer = () => {
                     </div>
 
                     {/* Links Section */}
-                    <div className="md:col-span-5 grid grid-cols-3 gap-6">
+                    <div className="md:col-span-5 grid grid-cols-2 sm:grid-cols-3 gap-6">
                         {/* Explore */}
                         <div>
                             <h3 className="font-bold mb-5 text-white text-sm uppercase tracking-wider">Explore</h3>
