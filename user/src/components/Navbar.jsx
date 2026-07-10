@@ -105,14 +105,14 @@ const Navbar = () => {
               {user && (
                 <NavigationMenuItem>
                   <NavLink
-                    to="/booking"
+                    to="/profile"
                     className={({ isActive }) => cn(
                       navigationMenuTriggerStyle(),
                       "rounded-full px-4 py-2 text-sm font-medium transition-all duration-300 hover:bg-secondary/10",
                       isActive ? "bg-secondary/15 text-primary font-bold shadow-sm" : "text-slate-600"
                     )}
                   >
-                    Bookings
+                    Dashboard
                   </NavLink>
                 </NavigationMenuItem>
               )}
@@ -213,14 +213,14 @@ const Navbar = () => {
 
           {user && (
             <NavLink
-              to="/booking"
+              to="/profile"
               onClick={() => setOpen(false)}
               className={({ isActive }) => cn(
                 "block rounded-xl px-4 py-3 text-base font-semibold text-slate-700 hover:bg-secondary/10 hover:text-primary transition-all duration-200",
                 isActive ? "bg-secondary/15 text-primary font-bold shadow-sm" : ""
               )}
             >
-              Bookings
+              Dashboard
             </NavLink>
           )}
 

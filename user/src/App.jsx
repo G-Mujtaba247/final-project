@@ -9,10 +9,12 @@ import Policies from './pages/safety/Policies'
 import FAQ from './components/FAQ'
 import Login from './pages/Auth/Login'
 import SignUp from './pages/Auth/SignUp'
+import ForgotPassword from './pages/Auth/ForgotPassword'
 import Booking from './pages/Booking'
 import BookTour from './components/Bookings/BookTour'
 import ProtectedRoute from './components/ProtectedRoute'
 import Page from './pages/Page'
+import Profile from './pages/Profile'
 
 
 
@@ -28,6 +30,7 @@ const App = () => {
         <Route element={<ProtectedRoute />}>
           <Route path="/booking" element={<Booking />} />
           <Route path="/booktour" element={<BookTour />} />
+          <Route path="/profile" element={<Profile />} />
         </Route>
 
         <Route path="/contact" element={<Contact />} />
@@ -36,6 +39,7 @@ const App = () => {
         <Route path="/faq" element={<FAQ />} />
         <Route path="/login" element={<Login />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/forgot-password" element={<ForgotPassword />} />
 
         {/* Dynamic Pages */}
         <Route path="/:slug" element={<Page />} />

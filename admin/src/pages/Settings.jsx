@@ -7,13 +7,30 @@ import { Separator } from "@/components/ui/separator";
 import { Trash2 } from 'lucide-react';
 import { useForm } from 'react-hook-form';
 import axios from 'axios';
-import { GET_SETTINGS, CREATE_SETTINGS, UPDATE_SETTINGS } from '@/resources/server-API';
+import { GET_SETTINGS, CREATE_SETTINGS, UPDATE_SETTINGS, HOST } from '@/resources/server-API';
 import { toast } from 'sonner';
 
 export default function Settings() {
     const { register, handleSubmit, reset } = useForm();
     const [socials, setSocials] = useState([]);
     const [appLogoPreview, setAppLogoPreview] = useState('');
+    
+    // Admin Profile State
+    const [adminProfile, setAdminProfile] = useState({ name: '', email: '' });
+    const [isProfileUpdating, setIsProfileUpdating] = useState(false);
+
+    useEffect(() => {
+        // Initialize admin profile from localStorage
+        const userStr = localStorage.getItem('user');
+        if (userStr) {
+            try {
+                const userObj = JSON.parse(userStr);
+                setAdminProfile({ name: userObj.name || '', email: userObj.email || '' });
+            } catch (e) {
+                console.error("Could not parse user from localStorage", e);
+            }
+        }
+    }, []);
 
     useEffect(() => {
         const fetchSettings = async () => {
@@ -96,6 +113,34 @@ export default function Settings() {
         }
     };
 
+    const handleSaveProfile = async () => {
+        if (!adminProfile.name || !adminProfile.email) {
+            toast.error("Name and Email are required");
+            return;
+        }
+        setIsProfileUpdating(true);
+        try {
+            const token = localStorage.getItem('token');
+            const response = await axios.patch(`${HOST}/user/profile`, adminProfile, {
+                headers: {
+                    Authorization: `Bearer ${token}`
+                }
+            });
+
+            if (response.data.status === true) {
+                toast.success("Profile updated successfully!");
+                localStorage.setItem('user', JSON.stringify(response.data.user));
+            } else {
+                toast.error(response.data.message || "Failed to update profile");
+            }
+        } catch (error) {
+            console.error("Error updating profile:", error);
+            toast.error("An error occurred while updating profile");
+        } finally {
+            setIsProfileUpdating(false);
+        }
+    };
+
     return (
         <div className="space-y-6 max-w-4xl">
             <div>
@@ -117,13 +162,26 @@ export default function Settings() {
                     <CardContent className="space-y-4">
                         <div className="space-y-2">
                             <Label htmlFor="name">Name</Label>
-                            <Input id="name" defaultValue="Admin User" />
+                            <Input 
+                                id="name" 
+                                value={adminProfile.name} 
+                                onChange={(e) => setAdminProfile({...adminProfile, name: e.target.value})} 
+                            />
                         </div>
                         <div className="space-y-2">
                             <Label htmlFor="email">Email</Label>
-                            <Input id="email" defaultValue="admin@explorepakistan.com" />
+                            <Input 
+                                id="email" 
+                                value={adminProfile.email} 
+                                onChange={(e) => setAdminProfile({...adminProfile, email: e.target.value})} 
+                            />
                         </div>
-                        <Button>Save Changes</Button>
+                        <Button 
+                            onClick={handleSaveProfile} 
+                            disabled={isProfileUpdating}
+                        >
+                            {isProfileUpdating ? "Saving..." : "Save Changes"}
+                        </Button>
                     </CardContent>
                 </Card>
 
