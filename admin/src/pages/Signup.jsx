@@ -1,7 +1,7 @@
 import { useState } from "react"
 import axios from "axios"
 import { Link, useNavigate } from "react-router-dom"
-import { HOST } from "@/resources/server-API"
+import { REGISTER_ADMIN } from "@/resources/server-API"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
@@ -18,6 +18,7 @@ export default function Signup() {
     const [name, setName] = useState("")
     const [email, setEmail] = useState("")
     const [password, setPassword] = useState("")
+    const [adminSignupKey, setAdminSignupKey] = useState("")
     const [error, setError] = useState("")
     const [isLoading, setIsLoading] = useState(false)
     const navigate = useNavigate()
@@ -33,10 +34,11 @@ export default function Signup() {
 
         setIsLoading(true)
         try {
-            const res = await axios.post(`${HOST}/user/register`, {
+            const res = await axios.post(REGISTER_ADMIN, {
                 name,
                 email,
                 password,
+                adminSignupKey,
             })
 
             if (res.data.status) {
@@ -87,7 +89,7 @@ export default function Signup() {
                             <Card className="rounded-[1.75rem] border border-slate-200 shadow-sm">
                                 <CardHeader>
                                     <CardTitle className="text-lg">Signing up</CardTitle>
-                                    <CardDescription>Create your admin credentials below.</CardDescription>
+                                    <CardDescription>Use the private setup key configured by your administrator.</CardDescription>
                                 </CardHeader>
                                 <CardContent className="grid gap-4">
                                     <div className="grid gap-2">
@@ -123,7 +125,20 @@ export default function Signup() {
                                     </div>
                                 </CardContent>
                             </Card>
-                            <Button className="w-full" type="submit">Create an account</Button>
+                            <div className="grid gap-2">
+                                <Label htmlFor="adminSignupKey">Administrator setup key</Label>
+                                <Input
+                                    id="adminSignupKey"
+                                    type="password"
+                                    autoComplete="off"
+                                    required
+                                    value={adminSignupKey}
+                                    onChange={(e) => setAdminSignupKey(e.target.value)}
+                                />
+                            </div>
+                            <Button className="w-full" type="submit" disabled={isLoading}>
+                                {isLoading ? "Creating account..." : "Create administrator account"}
+                            </Button>
                         </form>
                         <p className="text-center text-sm text-slate-500">
                             Already have an account?{' '}

@@ -1,5 +1,6 @@
 export const HOST = import.meta.env.VITE_API_URL || "https://explore-server-production.up.railway.app/api/v1";
 export const UPLOADS_HOST = import.meta.env.VITE_UPLOADS_URL || "https://explore-server-production.up.railway.app/uploads";
+export const REGISTER_ADMIN = `${HOST}/user/admin/register`;
 
 // Webpage APIs
 export const LIST_WEBPAGES = `${HOST}/webpages`;
@@ -27,4 +28,3 @@ export const UPDATE_SETTINGS = `${HOST}/settings/update`;
 export const ALL_BOOKINGS = `${HOST}/bookings`;
 export const UPDATE_BOOKING = `${HOST}/booking/update`;
 export const DELETE_BOOKING = `${HOST}/booking/delete`;
-

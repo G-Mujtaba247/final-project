@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Link, useLocation, Outlet, useNavigate } from 'react-router-dom';
+import { Link, useLocation, Outlet, useNavigate, Navigate } from 'react-router-dom';
 import {
     LayoutDashboard,
     Map,
@@ -100,18 +100,24 @@ export default function AdminLayout() {
     const [isMobileOpen, setIsMobileOpen] = useState(false);
     const [searchQuery, setSearchQuery] = useState("");
     const navigate = useNavigate();
-    const [user, setUser] = useState(null);
+    const [user] = useState(() => {
+        try {
+            return JSON.parse(localStorage.getItem("user") || "null");
+        } catch {
+            return null;
+        }
+    });
 
     useEffect(() => {
         const token = localStorage.getItem("token");
-        const storedUser = localStorage.getItem("user");
-
-        if (!token) {
+        if (!token || user?.role !== "admin") {
             navigate("/login");
-        } else if (storedUser) {
-            setUser(JSON.parse(storedUser));
         }
-    }, [navigate]);
+    }, [navigate, user]);
+
+    if (!localStorage.getItem("token") || user?.role !== "admin") {
+        return <Navigate to="/login" replace />;
+    }
 
     const handleLogout = () => {
         localStorage.removeItem("token");

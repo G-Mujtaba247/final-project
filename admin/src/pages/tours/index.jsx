@@ -51,6 +51,8 @@ export default function ToursPage() {
         title: "",
         description: "",
         price: "",
+        startDate: "",
+        endDate: "",
         image: null
     });
     const [loading, setLoading] = useState(false);
@@ -107,6 +109,8 @@ export default function ToursPage() {
             title: tour.title,
             description: tour.description,
             price: tour.price,
+            startDate: tour.startDate ? new Date(tour.startDate).toISOString().slice(0, 10) : "",
+            endDate: tour.endDate ? new Date(tour.endDate).toISOString().slice(0, 10) : "",
             image: null // Keep null, if they want to update they upload new one
         });
         setEditingId(tour._id);
@@ -126,6 +130,8 @@ export default function ToursPage() {
             data.append("title", formData.title);
             data.append("description", formData.description);
             data.append("price", formData.price);
+            data.append("startDate", formData.startDate);
+            data.append("endDate", formData.endDate);
             if (formData.image) {
                 data.append("image", formData.image);
             }
@@ -151,7 +157,7 @@ export default function ToursPage() {
 
             if (res.data.status) {
                 setIsAddOpen(false);
-                setFormData({ title: "", description: "", price: "", image: null });
+                setFormData({ title: "", description: "", price: "", startDate: "", endDate: "", image: null });
                 setEditingId(null);
                 fetchTours();
             } else {
@@ -175,7 +181,7 @@ export default function ToursPage() {
                 <Dialog open={isAddOpen} onOpenChange={(open) => {
                     setIsAddOpen(open);
                     if (!open) {
-                        setFormData({ title: "", description: "", price: "", image: null });
+                        setFormData({ title: "", description: "", price: "", startDate: "", endDate: "", image: null });
                         setEditingId(null);
                     }
                 }}>
@@ -227,6 +233,29 @@ export default function ToursPage() {
                                         id="description"
                                         value={formData.description}
                                         onChange={(e) => setFormData({ ...formData, description: e.target.value })}
+                                        className="col-span-3"
+                                        required
+                                    />
+                                </div>
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label htmlFor="startDate" className="text-right">Start</Label>
+                                    <Input
+                                        id="startDate"
+                                        type="date"
+                                        value={formData.startDate}
+                                        onChange={(e) => setFormData({ ...formData, startDate: e.target.value })}
+                                        className="col-span-3"
+                                        required
+                                    />
+                                </div>
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label htmlFor="endDate" className="text-right">End</Label>
+                                    <Input
+                                        id="endDate"
+                                        type="date"
+                                        min={formData.startDate}
+                                        value={formData.endDate}
+                                        onChange={(e) => setFormData({ ...formData, endDate: e.target.value })}
                                         className="col-span-3"
                                         required
                                     />

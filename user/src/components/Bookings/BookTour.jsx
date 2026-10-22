@@ -49,7 +49,12 @@ const BookTour = () => {
   }, [numericPrice, price, formData.numberOfPeople]);
 
   React.useEffect(() => {
-    const user = JSON.parse(localStorage.getItem("user"));
+    let user;
+    try {
+      user = JSON.parse(localStorage.getItem("user") || "null");
+    } catch {
+      user = null;
+    }
     if (user) {
       const [first, ...rest] = (user.name || "").split(" ");
       setFormData(prev => ({
@@ -68,20 +73,31 @@ const BookTour = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setLoading(true);
-    setStatus({ type: "", text: "" });
-
     const userString = localStorage.getItem("user");
-    const user = userString ? JSON.parse(userString) : null;
+    let user;
+    try {
+      user = userString ? JSON.parse(userString) : null;
+    } catch {
+      user = null;
+    }
     const token = localStorage.getItem("token");
 
+    if (!id || !title) {
+      setStatus({ type: "error", text: "Select an available tour before submitting a booking." });
+      return;
+    }
+    if (!token) {
+      setStatus({ type: "error", text: "Please sign in again before submitting a booking." });
+      return;
+    }
     // Validation checks
     if (!formData.firstName || !formData.lastName || !formData.phone || !formData.email || !formData.bookingDate) {
       setStatus({ type: "error", text: "Please fill in all required fields before submitting." });
-      setLoading(false);
       return;
     }
 
+    setLoading(true);
+    setStatus({ type: "", text: "" });
     try {
       const payload = {
         firstName: formData.firstName,
@@ -100,19 +116,13 @@ const BookTour = () => {
       const config = {
         timeout: 15000, // 15 second timeout
         headers: {
+          Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
           'Accept': 'application/json'
         },
-        validateStatus: function (status) {
-          // Don't reject on any status code, handle all responses
-          return true;
-        }
       };
 
       const res = await axios.post(CREATE_BOOKING, payload, config);
-
-      console.log("Booking response status:", res.status);
-      console.log("Booking response data:", res.data);
 
       if (res.status === 200 && res.data?.status) {
         setStatus({ type: "success", text: "Booking submitted successfully! We will contact you shortly." });
@@ -256,13 +266,14 @@ const BookTour = () => {
                       />
                     </div>
                     <div className="space-y-2">
-                      <Label>Email Address</Label>
+                      <Label>Email Address <span className="text-red-500">*</span></Label>
                       <Input
                         name="email"
                         value={formData.email}
                         onChange={handleChange}
                         placeholder="Enter your email"
                         type="email"
+                        required
                       />
                     </div>
                   </div>

@@ -1,45 +1,11 @@
 import React, { useState, useEffect } from "react";
 import axios from "axios";
-import { UPLOADS_HOST, GET_TOURS } from "@/resources/server-API";
+import { GET_TOURS } from "@/resources/server-API";
 import WebLayout from "../layout/WebLayout";
-import { Card, CardContent, CardFooter, CardHeader } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import TravelDeals from "../components/TravelDeals";
 import { useNavigate } from "react-router";
 import TourCard from "../components/TourCard";
-
-const FALLBACK_TOURS = [
-  {
-    _id: "fallback-1",
-    title: "Northern Peaks Explorer",
-    description: "A scenic 5-day journey through Gilgit-Baltistan with mountain views, cultural villages, and lakeside camps.",
-    image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
-    status: "available",
-    price: 38000,
-    duration: "5 Days",
-    startDate: "2025-11-05",
-  },
-  {
-    _id: "fallback-2",
-    title: "Lahore Heritage Tour",
-    description: "Explore Lahore's iconic monuments, Mughal architecture, and famous food streets on a relaxed 3-day city trip.",
-    image: "https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=900&q=80",
-    status: "available",
-    price: 19500,
-    duration: "3 Days",
-    startDate: "2025-10-20",
-  },
-  {
-    _id: "fallback-3",
-    title: "Karachi Coastal Escape",
-    description: "A coastal weekend retreat with beach strolls, seafood dining, and modern city highlights.",
-    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80",
-    status: "available",
-    price: 22000,
-    duration: "4 Days",
-    startDate: "2025-12-10",
-  },
-];
 
 const Booking = () => {
   const [tours, setTours] = useState([]);
@@ -59,16 +25,14 @@ const Booking = () => {
           headers: { Authorization: `Bearer ${token}` }
         });
 
-        if (res.data.status && Array.isArray(res.data.tours) && res.data.tours.length) {
+        if (res.data.status && Array.isArray(res.data.tours)) {
           setTours(res.data.tours);
         } else {
-          setTours(FALLBACK_TOURS);
-          setError(res.data.message || "Unable to load tours from server; showing sample tours instead.");
+          setError(res.data.message || "Unable to load tours.");
         }
       } catch (error) {
         console.error("Failed to fetch tours:", error);
-        setTours(FALLBACK_TOURS);
-        setError("Unable to load tours. Showing sample tours instead.");
+        setError("Unable to load tours. Please try again later.");
       } finally {
         setLoading(false);
       }

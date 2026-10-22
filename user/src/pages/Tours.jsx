@@ -12,75 +12,6 @@ import { useNavigate } from "react-router";
 
 import TourCard from "../components/TourCard";
 
-const FALLBACK_TOURS = [
-  {
-    _id: "fallback-1",
-    title: "Northern Peaks Explorer",
-    description: "A scenic 5-day journey through Gilgit-Baltistan with mountain views, cultural villages, and lakeside camps.",
-    image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
-    status: "available",
-    price: 38000,
-    duration: "5 Days",
-    startDate: "2025-11-05",
-    location: "Gilgit-Baltistan",
-  },
-  {
-    _id: "fallback-2",
-    title: "Lahore Heritage Tour",
-    description: "Explore Lahore's iconic monuments, Mughal architecture, and famous food streets on a relaxed 3-day city trip.",
-    image: "https://images.unsplash.com/photo-1526392060635-9d6019884377?auto=format&fit=crop&w=900&q=80",
-    status: "available",
-    price: 19500,
-    duration: "3 Days",
-    startDate: "2025-10-20",
-    location: "Lahore",
-  },
-  {
-    _id: "fallback-3",
-    title: "Karachi Coastal Escape",
-    description: "A coastal weekend retreat with beach strolls, seafood dining, and modern city highlights.",
-    image: "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=900&q=80",
-    status: "upcoming",
-    price: 22000,
-    duration: "4 Days",
-    startDate: "2025-12-10",
-    location: "Karachi",
-  },
-  {
-    _id: "fallback-4",
-    title: "Skardu Adventure Trail",
-    description: "An upcoming adventure package with lakes, valleys, and mountain viewpoints for active explorers.",
-    image: "https://images.unsplash.com/photo-1500530855697-b586d89ba3ee?auto=format&fit=crop&w=900&q=80",
-    status: "upcoming",
-    price: 45000,
-    duration: "6 Days",
-    startDate: "2026-01-10",
-    location: "Skardu",
-  },
-  {
-    _id: "fallback-5",
-    title: "Islamabad Nature Retreat",
-    description: "A recent favorite featuring hilltop views, lakeside walks, and guided nature trails.",
-    image: "https://images.unsplash.com/photo-1512462610978-5e66ef3475ef?auto=format&fit=crop&w=900&q=80",
-    status: "recent",
-    price: 26000,
-    duration: "4 Days",
-    startDate: "2025-08-08",
-    location: "Islamabad",
-  },
-  {
-    _id: "fallback-6",
-    title: "Swat Valley Retreat",
-    description: "A recent tour through Swat's lush valleys, water streams, and local villages with comfortable stays.",
-    image: "https://images.unsplash.com/photo-1500534623283-312aade485b7?auto=format&fit=crop&w=900&q=80",
-    status: "recent",
-    price: 33000,
-    duration: "5 Days",
-    startDate: "2025-09-12",
-    location: "Swat Valley",
-  },
-];
-
 // ------------------ COMPONENT ------------------
 
 const Tour = () => {
@@ -89,6 +20,7 @@ const Tour = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortBy, setSortBy] = useState("recommended");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const filteredTours = React.useMemo(() => {
@@ -149,14 +81,14 @@ const Tour = () => {
     const fetchTours = async () => {
       try {
         const response = await axios.get(GET_TOURS);
-        if (response.data.status && Array.isArray(response.data.tours) && response.data.tours.length) {
+        if (response.data.status && Array.isArray(response.data.tours)) {
           setTours(response.data.tours);
         } else {
-          setTours(FALLBACK_TOURS);
+          setError(response.data.message || "Tours could not be loaded.");
         }
       } catch (error) {
         console.error("Error fetching tours:", error);
-        setTours(FALLBACK_TOURS);
+        setError("Tours could not be loaded. Please try again later.");
       } finally {
         setLoading(false);
       }
@@ -189,6 +121,7 @@ const Tour = () => {
         <p className="text-center text-gray-600 mb-10">
           Discover amazing destinations and book your next adventure with us.
         </p>
+        {error && <p role="alert" className="mb-6 rounded-xl bg-rose-50 p-4 text-center text-rose-700">{error}</p>}
 
         <div className="grid gap-6 lg:grid-cols-[1.8fr_1fr] mb-10">
           <div className="space-y-4">

@@ -33,8 +33,9 @@ const ForgotPassword = () => {
       } else {
         setError(res.data.message || "Failed to send OTP.");
       }
-    } catch (err) {
-      setError("An error occurred. Please try again.");
+    } catch (error) {
+      console.error("Failed to send password reset OTP:", error);
+      setError(error.response?.data?.message || "An error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -57,8 +58,9 @@ const ForgotPassword = () => {
       } else {
         setError(res.data.message || "Invalid OTP.");
       }
-    } catch (err) {
-      setError("An error occurred. Please try again.");
+    } catch (error) {
+      console.error("Failed to verify password reset OTP:", error);
+      setError(error.response?.data?.message || "An error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }
@@ -81,8 +83,9 @@ const ForgotPassword = () => {
       } else {
         setError(res.data.message || "Failed to reset password.");
       }
-    } catch (err) {
-      setError("An error occurred. Please try again.");
+    } catch (error) {
+      console.error("Failed to reset password:", error);
+      setError(error.response?.data?.message || "An error occurred. Please try again.");
     } finally {
       setIsLoading(false);
     }

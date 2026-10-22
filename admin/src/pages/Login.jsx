@@ -27,6 +27,10 @@ export default function Login() {
         try {
             const res = await axios.post(`${HOST}/user/login`, formData);
             if (res.data.status) {
+                if (res.data.user?.role !== "admin") {
+                    alert("This account does not have administrator access.");
+                    return;
+                }
                 localStorage.setItem("user", JSON.stringify(res.data.user));
                 localStorage.setItem("token", res.data.userToken);
                 navigate("/dashboard");

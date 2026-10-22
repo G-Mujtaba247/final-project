@@ -58,8 +58,9 @@ const Profile = () => {
       } else {
         setMessage(res.data.message || "Update failed.");
       }
-    } catch (err) {
-      setMessage("An error occurred.");
+    } catch (error) {
+      console.error("Failed to update profile:", error);
+      setMessage(error.response?.data?.message || "An error occurred.");
     } finally {
       setIsUpdating(false);
     }
@@ -134,7 +135,7 @@ const Profile = () => {
                           }`}>
                             {booking.status.toUpperCase()}
                           </span>
-                          <p className="font-bold text-slate-800 mt-2">Rs. {booking.totalPrice}</p>
+                          <p className="font-bold text-slate-800 mt-2">Rs. {Number(booking.price || 0).toLocaleString()}</p>
                         </div>
                       </div>
                     ))}
