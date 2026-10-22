@@ -98,6 +98,7 @@ export default function Contact() {
       <section className="relative w-full h-[350px] md:h-[460px] overflow-hidden bg-white">
         <img
           src="Safety.webp"
+          alt="Explore Pakistan landscape"
           className="absolute inset-0 mt-20 w-full h-full object-cover"
         />
         <div className="absolute inset-0 bg-gradient-to-b from-black/5 to-black/70"></div>

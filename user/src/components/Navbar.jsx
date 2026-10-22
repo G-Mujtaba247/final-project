@@ -16,7 +16,12 @@ const Navbar = () => {
   const [open, setOpen] = useState(false);
   const navigate = useNavigate();
   const userString = localStorage.getItem("user");
-  const user = userString ? JSON.parse(userString) : null;
+  let user = null;
+  try {
+    user = userString ? JSON.parse(userString) : null;
+  } catch (error) {
+    console.error("Unable to read signed-in user data:", error);
+  }
   const userName = user?.name ? user.name.split(" ")[0] : null;
   const [dynamicPages, setDynamicPages] = useState([]);
 

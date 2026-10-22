@@ -33,7 +33,8 @@ const BookTour = () => {
 
   const minDate = React.useMemo(() => {
     const today = new Date().toISOString().split("T")[0];
-    return startDate && startDate > today ? startDate : today;
+    const firstTourDate = startDate ? new Date(startDate).toISOString().split("T")[0] : today;
+    return firstTourDate > today ? firstTourDate : today;
   }, [startDate]);
   const numericPrice = React.useMemo(() => {
     const cleaned = String(price || "").replace(/[^\d.]/g, "");
