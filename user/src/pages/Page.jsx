@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useParams } from 'react-router';
 import axios from 'axios';
+import DOMPurify from 'dompurify';
 import { DETAIL_WEBPAGE } from '@/resources/server-API';
 import WebLayout from '@/layout/WebLayout';
 
@@ -57,7 +58,7 @@ const Page = () => {
                     <h1 className="text-4xl md:text-5xl font-bold mb-8 text-center">{page.title}</h1>
                     <div
                         className="prose prose-lg dark:prose-invert max-w-none"
-                        dangerouslySetInnerHTML={{ __html: page.content }}
+                        dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(page.content || "") }}
                     />
                 </div>
             </div>

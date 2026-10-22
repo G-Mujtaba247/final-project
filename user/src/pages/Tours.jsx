@@ -216,6 +216,8 @@ const Tour = () => {
                       id: selectedTour._id,
                       title: selectedTour.title,
                       price: selectedTour.price,
+                      startDate: selectedTour.startDate,
+                      endDate: selectedTour.endDate,
                     },
                   })
                 }

@@ -3,8 +3,8 @@ import {
   NavigationMenu,
   NavigationMenuItem,
   NavigationMenuList,
-  navigationMenuTriggerStyle,
 } from "../components/ui/navigation-menu";
+import { navigationMenuTriggerStyle } from "../components/ui/navigation-menu-style";
 import { cn } from "@/lib/utils";
 import { NavLink, useNavigate } from "react-router";
 import { Button } from "./ui/button";

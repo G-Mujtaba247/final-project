@@ -126,7 +126,7 @@ const Profile = () => {
                       <div key={booking._id} className="p-4 rounded-xl border border-slate-100 shadow-sm flex flex-col sm:flex-row justify-between gap-4">
                         <div>
                           <h4 className="font-bold text-slate-800 text-lg">{booking.tourName || "Tour"}</h4>
-                          <p className="text-sm text-slate-500">Date: {new Date(booking.tourDate).toLocaleDateString()}</p>
+                          <p className="text-sm text-slate-500">Date: {new Date(booking.bookingDate).toLocaleDateString()}</p>
                           <p className="text-sm text-slate-500">Guests: {booking.numberOfPeople}</p>
                         </div>
                         <div className="text-right">

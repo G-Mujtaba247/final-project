@@ -26,7 +26,6 @@ import { toast } from 'sonner';
 
 export default function Booking() {
     const [bookings, setBookings] = useState([]);
-    const [selectedBooking, setSelectedBooking] = useState(null);
     const [selectedBookings, setSelectedBookings] = useState([]);
 
     const fetchBookings = async () => {
@@ -45,6 +44,8 @@ export default function Booking() {
     };
 
     useEffect(() => {
+        // The state update occurs only after the asynchronous network response.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         fetchBookings();
     }, []);
 

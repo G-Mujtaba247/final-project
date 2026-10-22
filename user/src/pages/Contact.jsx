@@ -29,10 +29,11 @@ const API_BASE_URL = HOST;
 
 export default function Contact() {
   const [contactData, setContactData] = useState({
-    phone: "+92 342 4493250",
-    email: "explorepakistan369@gmail.com",
-    address: "Arfa Tower, Lahore, Pakistan",
-    map: "https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d13611.01962830055!2d74.317488!3d31.481210!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x391905bda2f42c0f%3A0xaea46777dae1f7a0!2sArfa%20Software%20Technology%20Park!5e0!3m2!1sen!2sPK!4v1700000000000"
+    phone: "",
+    email: "",
+    address: "",
+    map: "",
+    faqs: []
   });
 
   const [formData, setFormData] = useState({
@@ -44,6 +45,7 @@ export default function Contact() {
 
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitMessage, setSubmitMessage] = useState("");
+  const [contactError, setContactError] = useState("");
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
@@ -80,10 +82,12 @@ export default function Contact() {
         const response = await axios.get(`${API_BASE_URL}/website/contact`);
         if (response.data.status === true && response.data.contact) {
           setContactData(response.data.contact);
+        } else {
+          setContactError(response.data.message || "Contact information is not available.");
         }
       } catch (error) {
-        console.log("Error fetching contact data:", error);
-        // Using default values if API fails
+        console.error("Error fetching contact data:", error);
+        setContactError("Contact information could not be loaded. Please try again later.");
       }
     };
     fetchContactData();
@@ -112,6 +116,7 @@ export default function Contact() {
       <section className="container mx-auto px-4 md:px-8 py-12 md:py-20 grid grid-cols-1 lg:grid-cols-2 gap-10 lg:gap-14">
         {/* Left Cards */}
         <div className="space-y-6">
+          {contactError && <p role="status" className="rounded-lg bg-amber-50 p-4 text-amber-800">{contactError}</p>}
           {/* Card Template */}
           {[
             { icon: Mail, title: "Email Us", value: contactData.email },
@@ -208,58 +213,38 @@ export default function Contact() {
           Frequently Asked Questions
         </h2>
 
-        <Accordion
-          type="single"
-          collapsible
-          className="w-full max-w-3xl mx-auto space-y-3"
-        >
-          <AccordionItem value="item-1" className="border rounded-lg px-4">
-            <AccordionTrigger className="text-lg">
-              When is the best time to visit?
-            </AccordionTrigger>
-            <AccordionContent className="text-gray-700">
-              The summer season (June–September) provides ideal temperatures and
-              breathtaking views. Spring and autumn are perfect for peaceful
-              exploration with pleasant weather.
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="item-2" className="border rounded-lg px-4">
-            <AccordionTrigger className="text-lg">
-              Do you offer group discounts?
-            </AccordionTrigger>
-            <AccordionContent className="text-gray-700">
-              Yes! Groups of 8+ enjoy discounted pricing. We also offer special
-              packages for corporate or student tours.
-            </AccordionContent>
-          </AccordionItem>
-
-          <AccordionItem value="item-3" className="border rounded-lg px-4">
-            <AccordionTrigger className="text-lg">
-              What’s included in the tour price?
-            </AccordionTrigger>
-            <AccordionContent className="text-gray-700">
-              Accommodation, transport, local guides, and meals are included.
-              Some optional activities have additional costs.
-            </AccordionContent>
-          </AccordionItem>
-        </Accordion>
+        {contactData.faqs?.length ? (
+          <Accordion type="single" collapsible className="mx-auto w-full max-w-3xl space-y-3">
+            {contactData.faqs.map((faq, index) => (
+              <AccordionItem key={faq.id || index} value={String(faq.id || index)} className="rounded-lg border px-4">
+                <AccordionTrigger className="text-lg">{faq.question}</AccordionTrigger>
+                <AccordionContent className="text-gray-700">{faq.answer}</AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        ) : (
+          <p className="text-center text-muted-foreground">Frequently asked questions are not available yet.</p>
+        )}
       </section>
 
       {/* ======================= MAP SECTION ======================= */}
       <section className="container mx-auto px-4 pb-24">
         <h2 className="text-4xl font-bold text-center mb-8">Find Us</h2>
 
-        <Card className="overflow-hidden shadow-xl rounded-2xl border border-gray-200">
-          <iframe
-            title="Location Map"
-            src={contactData.map}
-            width="100%"
-            height="430"
-            allowFullScreen=""
-            loading="lazy"
-          ></iframe>
-        </Card>
+        {contactData.map ? (
+          <Card className="overflow-hidden shadow-xl rounded-2xl border border-gray-200">
+            <iframe
+              title="Location Map"
+              src={contactData.map}
+              width="100%"
+              height="430"
+              allowFullScreen=""
+              loading="lazy"
+            ></iframe>
+          </Card>
+        ) : (
+          <p className="text-center text-muted-foreground">Map location has not been configured.</p>
+        )}
       </section>
     </WebLayout>
   );

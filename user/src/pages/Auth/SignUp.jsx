@@ -158,6 +158,7 @@ const SignUp = () => {
                   id="password"
                   name="password"
                   type={showPassword ? "text" : "password"}
+                  minLength={8}
                   placeholder="••••••••"
                   className="w-full pr-10 py-2.5 border border-gray-300 rounded-r-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-[#ebf5fb]/50"
                   value={formData.password}

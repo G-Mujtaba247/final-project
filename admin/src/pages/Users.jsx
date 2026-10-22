@@ -48,7 +48,7 @@ export default function UsersPage() {
                     setUsers(res.data.users);
                 }
             } catch (error) {
-                console.error("Failed to fetch users");
+                console.error("Failed to fetch users:", error);
             } finally {
                 setLoading(false);
             }

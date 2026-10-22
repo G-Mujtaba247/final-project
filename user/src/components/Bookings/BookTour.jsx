@@ -1,5 +1,5 @@
 import React from "react";
-import { useLocation, useNavigate } from "react-router";
+import { Navigate, useLocation, useNavigate } from "react-router";
 import axios from "axios";
 import { CREATE_BOOKING } from "../../resources/server-API";
 import { Input } from "@/components/ui/input";
@@ -17,7 +17,7 @@ import WebLayout from "../../layout/WebLayout";
 const BookTour = () => {
   const navigate = useNavigate();
   const location = useLocation();
-  const { id, title, price } = location.state || {};
+  const { id, title, price, startDate, endDate } = location.state || {};
 
   const [formData, setFormData] = React.useState({
     firstName: "",
@@ -31,7 +31,10 @@ const BookTour = () => {
   const [loading, setLoading] = React.useState(false);
   const [status, setStatus] = React.useState({ type: "", text: "" });
 
-  const minDate = React.useMemo(() => new Date().toISOString().split("T")[0], []);
+  const minDate = React.useMemo(() => {
+    const today = new Date().toISOString().split("T")[0];
+    return startDate && startDate > today ? startDate : today;
+  }, [startDate]);
   const numericPrice = React.useMemo(() => {
     const cleaned = String(price || "").replace(/[^\d.]/g, "");
     const parsed = Number(cleaned);
@@ -65,6 +68,10 @@ const BookTour = () => {
       }));
     }
   }, []);
+
+  if (!id || !title) {
+    return <Navigate to="/tours" replace />;
+  }
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -298,6 +305,7 @@ const BookTour = () => {
                         onChange={handleChange}
                         type="date"
                         min={minDate}
+                        max={endDate ? new Date(endDate).toISOString().split("T")[0] : undefined}
                         required
                       />
                     </div>

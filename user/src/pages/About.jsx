@@ -1,4 +1,5 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
+import axios from 'axios'
 import WebLayout from '../layout/WebLayout'
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card"
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
@@ -6,8 +7,27 @@ import { Separator } from "@/components/ui/separator"
 import { Button } from "@/components/ui/button"
 import { Carousel, CarouselContent, CarouselItem, CarouselNext, CarouselPrevious } from "@/components/ui/carousel"
 import { Globe, MapPin, Sun, Users, ArrowRight } from 'lucide-react'
+import { HOST } from '@/resources/server-API'
 
 const About = () => {
+    const [aboutContent, setAboutContent] = useState(null)
+
+    useEffect(() => {
+        let active = true
+        axios.get(`${HOST}/website/about`)
+            .then((response) => {
+                if (active && response.data.status && Array.isArray(response.data.about)) {
+                    setAboutContent(response.data.about[0] || null)
+                }
+            })
+            .catch((error) => {
+                console.error("Failed to load About page content:", error)
+            })
+        return () => {
+            active = false
+        }
+    }, [])
+
     const features = [
         {
             icon: <Globe className="h-10 w-10 text-primary" />,
@@ -148,6 +168,38 @@ const About = () => {
                             />
                         </div>
                     </section>
+
+                    {aboutContent && (
+                        <section className="grid gap-8 rounded-3xl border border-slate-200 bg-white/80 p-6 shadow-sm md:grid-cols-[1fr_1.4fr] md:p-10">
+                            {aboutContent.file && (
+                                <img
+                                    src={aboutContent.file}
+                                    alt="Explore Pakistan"
+                                    className="h-64 w-full rounded-2xl object-cover md:h-full"
+                                />
+                            )}
+                            <div className="space-y-6">
+                                <div>
+                                    <h2 className="text-2xl font-bold">Our Mission</h2>
+                                    <p className="mt-2 text-muted-foreground">{aboutContent.mission}</p>
+                                </div>
+                                <div>
+                                    <h2 className="text-2xl font-bold">Our Vision</h2>
+                                    <p className="mt-2 text-muted-foreground">{aboutContent.vision}</p>
+                                </div>
+                                {aboutContent.features?.length > 0 && (
+                                    <div>
+                                        <h2 className="text-2xl font-bold">What Makes Us Different</h2>
+                                        <ul className="mt-3 list-inside list-disc space-y-2 text-muted-foreground">
+                                            {aboutContent.features.map((feature, index) => (
+                                                <li key={feature.id || index}>{feature.text || feature.title}</li>
+                                            ))}
+                                        </ul>
+                                    </div>
+                                )}
+                            </div>
+                        </section>
+                    )}
 
                     <Separator />
 

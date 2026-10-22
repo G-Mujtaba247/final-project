@@ -90,7 +90,9 @@ const Booking = () => {
                     state: {
                       id: tour._id,
                       title: tour.title,
-                      price: tour.price
+                      price: tour.price,
+                      startDate: tour.startDate,
+                      endDate: tour.endDate
                     }
                   })}
                 />

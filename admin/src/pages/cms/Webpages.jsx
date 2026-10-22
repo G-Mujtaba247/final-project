@@ -80,6 +80,8 @@ export default function Webpages() {
         }
     }, [])
     useEffect(() => {
+        // The state update occurs only after the asynchronous network response.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         getWebpages();
     }, [getWebpages]);
 

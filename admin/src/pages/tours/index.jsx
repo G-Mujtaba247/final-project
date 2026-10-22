@@ -53,6 +53,7 @@ export default function ToursPage() {
         price: "",
         startDate: "",
         endDate: "",
+        status: "available",
         image: null
     });
     const [loading, setLoading] = useState(false);
@@ -79,7 +80,7 @@ export default function ToursPage() {
                 setTours(res.data.tours);
             }
         } catch (error) {
-            console.error("Failed to fetch tours");
+            console.error("Failed to fetch tours:", error);
         }
     };
 
@@ -100,7 +101,8 @@ export default function ToursPage() {
                 alert("Failed to delete");
             }
         } catch (error) {
-            alert("Error deleting tour");
+            console.error("Failed to delete tour:", error);
+            alert(error.response?.data?.message || "Error deleting tour");
         }
     };
 
@@ -111,6 +113,7 @@ export default function ToursPage() {
             price: tour.price,
             startDate: tour.startDate ? new Date(tour.startDate).toISOString().slice(0, 10) : "",
             endDate: tour.endDate ? new Date(tour.endDate).toISOString().slice(0, 10) : "",
+            status: tour.status || "available",
             image: null // Keep null, if they want to update they upload new one
         });
         setEditingId(tour._id);
@@ -132,6 +135,7 @@ export default function ToursPage() {
             data.append("price", formData.price);
             data.append("startDate", formData.startDate);
             data.append("endDate", formData.endDate);
+            data.append("status", formData.status);
             if (formData.image) {
                 data.append("image", formData.image);
             }
@@ -157,7 +161,7 @@ export default function ToursPage() {
 
             if (res.data.status) {
                 setIsAddOpen(false);
-                setFormData({ title: "", description: "", price: "", startDate: "", endDate: "", image: null });
+                setFormData({ title: "", description: "", price: "", startDate: "", endDate: "", status: "available", image: null });
                 setEditingId(null);
                 fetchTours();
             } else {
@@ -181,7 +185,7 @@ export default function ToursPage() {
                 <Dialog open={isAddOpen} onOpenChange={(open) => {
                     setIsAddOpen(open);
                     if (!open) {
-                        setFormData({ title: "", description: "", price: "", startDate: "", endDate: "", image: null });
+                        setFormData({ title: "", description: "", price: "", startDate: "", endDate: "", status: "available", image: null });
                         setEditingId(null);
                     }
                 }}>
@@ -259,6 +263,18 @@ export default function ToursPage() {
                                         className="col-span-3"
                                         required
                                     />
+                                </div>
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label htmlFor="status" className="text-right">Status</Label>
+                                    <select
+                                        id="status"
+                                        value={formData.status}
+                                        onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                                        className="col-span-3 h-10 rounded-md border border-input bg-background px-3 text-sm"
+                                    >
+                                        <option value="available">Available</option>
+                                        <option value="recent">Recent</option>
+                                    </select>
                                 </div>
                                 <div className="grid grid-cols-4 items-center gap-4">
                                     <Label htmlFor="image" className="text-right">
