@@ -35,7 +35,6 @@ const statusStyles = {
 
 const TourCard = ({ tour, onBookTour }) => {
   const navigate = useNavigate();
-  const isBookable = tour.status === "available";
   const isRecent = tour.status === "recent";
   const isUpcoming = tour.status === "upcoming";
 

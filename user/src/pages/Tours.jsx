@@ -13,9 +13,6 @@ import { useNavigate } from "react-router";
 import TourCard from "../components/TourCard";
 import {
   toursData as localTours,
-  getAvailableTours,
-  getRecentTours,
-  getUpcomingTours,
 } from "../data/tours";
 
 // ------------------ COMPONENT ------------------
