@@ -11,6 +11,12 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 
 import TourCard from "../components/TourCard";
+import {
+  toursData as localTours,
+  getAvailableTours,
+  getRecentTours,
+  getUpcomingTours,
+} from "../data/tours";
 
 // ------------------ COMPONENT ------------------
 
@@ -67,28 +73,27 @@ const Tour = () => {
   }, [tours, searchQuery, statusFilter, sortBy]);
 
   const totalTours = tours.length;
-  const availableToursCount = tours.filter((tour) =>
-    tour.status === "upcoming" || tour.status === "available"
-  ).length;
+  const availableToursCount = tours.filter((tour) => tour.status === "available").length;
+  const upcomingToursCount = tours.filter((tour) => tour.status === "upcoming").length;
   const recentToursCount = tours.filter((tour) => tour.status === "recent").length;
 
-  const upcomingTours = filteredTours.filter(
-    (tour) => tour.status === "upcoming" || tour.status === "available"
-  );
+  const availableTours = filteredTours.filter((tour) => tour.status === "available");
+  const upcomingTours = filteredTours.filter((tour) => tour.status === "upcoming");
   const recentTours = filteredTours.filter((tour) => tour.status === "recent");
 
   useEffect(() => {
     const fetchTours = async () => {
       try {
         const response = await axios.get(GET_TOURS);
-        if (response.data.status && Array.isArray(response.data.tours)) {
+        if (response.data.status && Array.isArray(response.data.tours) && response.data.tours.length > 0) {
           setTours(response.data.tours);
         } else {
-          setError(response.data.message || "Tours could not be loaded.");
+          // API returned empty or unexpected — use local data
+          setTours(localTours);
         }
-      } catch (error) {
-        console.error("Error fetching tours:", error);
-        setError("Tours could not be loaded. Please try again later.");
+      } catch {
+        // Network error or server unreachable — use local data seamlessly
+        setTours(localTours);
       } finally {
         setLoading(false);
       }
@@ -97,14 +102,34 @@ const Tour = () => {
     fetchTours();
   }, []);
 
+  /** Shared book-tour handler */
+  const handleBookTour = (selectedTour) =>
+    navigate("/booktour", {
+      state: {
+        id: selectedTour._id || selectedTour.id,
+        title: selectedTour.title,
+        price: selectedTour.price,
+        startDate: selectedTour.startDate,
+        endDate: selectedTour.endDate,
+      },
+    });
 
-
+  /** Empty-state component for reuse across sections */
+  const EmptySection = ({ message, sub }) => (
+    <div className="text-center py-12">
+      <p className="text-gray-500 text-lg">{message}</p>
+      <p className="text-gray-400 mt-2">{sub}</p>
+    </div>
+  );
 
   if (loading) {
     return (
       <WebLayout>
         <div className="min-h-screen flex items-center justify-center">
-          <div className="animate-pulse text-lg text-muted-foreground">Loading tours...</div>
+          <div className="text-center">
+            <div className="mx-auto h-12 w-12 animate-spin rounded-full border-4 border-secondary/30 border-t-secondary" />
+            <p className="mt-4 animate-pulse text-lg text-muted-foreground">Loading tours...</p>
+          </div>
         </div>
       </WebLayout>
     );
@@ -113,13 +138,15 @@ const Tour = () => {
   return (
     <>
     <WebLayout>
-    <div className="max-w-7xl mx-auto space-y-12 pt-16 pb-16 mt-10">
+    <div className="max-w-7xl mx-auto space-y-16 pt-16 pb-16 mt-10 px-4">
 
-      {/* ---------- UPCOMING TOURS ---------- */}
+      {/* ══════════════ HEADER & FILTERS ══════════════ */}
       <section>
-        <h2 className="text-4xl font-bold mb-4 text-center">Available Tours</h2>
-        <p className="text-center text-gray-600 mb-10">
-          Discover amazing destinations and book your next adventure with us.
+        <h1 className="text-4xl md:text-5xl font-bold mb-3 text-center text-primary">
+          Explore Our Tours
+        </h1>
+        <p className="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
+          Discover amazing destinations across Pakistan and book your next adventure with us.
         </p>
         {error && <p role="alert" className="mb-6 rounded-xl bg-rose-50 p-4 text-center text-rose-700">{error}</p>}
 
@@ -185,16 +212,16 @@ const Tour = () => {
             </div>
           </div>
 
-          <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-1">
+          <div className="grid gap-4 sm:grid-cols-3 lg:grid-cols-1">
             <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
               <p className="text-sm uppercase tracking-[0.3em] text-slate-400">Total tours</p>
               <p className="mt-3 text-4xl font-semibold text-primary">{totalTours}</p>
-              <p className="mt-2 text-sm text-slate-500">Browse all packages currently available for booking.</p>
+              <p className="mt-2 text-sm text-slate-500">Browse all packages currently listed.</p>
             </div>
             <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
               <p className="text-sm uppercase tracking-[0.3em] text-slate-400">Available now</p>
               <p className="mt-3 text-4xl font-semibold text-secondary">{availableToursCount}</p>
-              <p className="mt-2 text-sm text-slate-500">Upcoming and available departures ready for reservation.</p>
+              <p className="mt-2 text-sm text-slate-500">Open for booking right now.</p>
             </div>
             <div className="rounded-3xl border border-slate-200 bg-white p-6 shadow-sm">
               <p className="text-sm uppercase tracking-[0.3em] text-slate-400">Recent trips</p>
@@ -203,53 +230,91 @@ const Tour = () => {
             </div>
           </div>
         </div>
+      </section>
+
+      {/* ══════════════ AVAILABLE TOURS (4) ══════════════ */}
+      <section>
+        <div className="flex items-center gap-3 mb-2">
+          <h2 className="text-3xl md:text-4xl font-bold text-primary">Available Tours</h2>
+          <Badge className="bg-secondary text-white border-0 px-3 py-1 text-xs tracking-wider rounded-xl shadow-sm">
+            {availableTours.length}
+          </Badge>
+        </div>
+        <p className="text-gray-600 mb-8 max-w-2xl">
+          Ready to book — pick your favourite destination and secure your spot today.
+        </p>
+
+        {availableTours.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+            {availableTours.map((tour) => (
+              <TourCard
+                key={tour._id || tour.id}
+                tour={tour}
+                onBookTour={handleBookTour}
+              />
+            ))}
+          </div>
+        ) : (
+          <EmptySection
+            message="No available tours match your filters."
+            sub="Try adjusting the search or status options above."
+          />
+        )}
+      </section>
+
+      {/* ══════════════ UPCOMING TOURS (2) ══════════════ */}
+      <section>
+        <div className="flex items-center gap-3 mb-2">
+          <h2 className="text-3xl md:text-4xl font-bold text-primary">Upcoming Tours</h2>
+          <Badge className="bg-accent text-accent-foreground border-0 px-3 py-1 text-xs tracking-wider rounded-xl shadow-sm">
+            {upcomingTours.length}
+          </Badge>
+        </div>
+        <p className="text-gray-600 mb-8 max-w-2xl">
+          Exciting adventures on the horizon — pre-book now to guarantee your seat.
+        </p>
 
         {upcomingTours.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {upcomingTours.map((tour) => (
               <TourCard
-                key={tour._id}
+                key={tour._id || tour.id}
                 tour={tour}
-                onBookTour={(selectedTour) =>
-                  navigate("/booktour", {
-                    state: {
-                      id: selectedTour._id,
-                      title: selectedTour.title,
-                      price: selectedTour.price,
-                      startDate: selectedTour.startDate,
-                      endDate: selectedTour.endDate,
-                    },
-                  })
-                }
+                onBookTour={handleBookTour}
               />
             ))}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No upcoming tours match your filters.</p>
-            <p className="text-gray-400 mt-2">Try adjusting the search or status options above.</p>
-          </div>
+          <EmptySection
+            message="No upcoming tours at the moment."
+            sub="Stay tuned — new tours are added regularly!"
+          />
         )}
       </section>
 
-      {/* ---------- RECENT TOURS ---------- */}
+      {/* ══════════════ RECENT TOURS (4) ══════════════ */}
       <section>
-        <h2 className="text-4xl font-bold mb-4 text-center">Recent Tours</h2>
-        <p className="text-center text-gray-600 mb-10">
-          Explore our recently completed adventures and plan your next trip.
+        <div className="flex items-center gap-3 mb-2">
+          <h2 className="text-3xl md:text-4xl font-bold text-primary">Recent Tours</h2>
+          <Badge className="bg-primary text-primary-foreground border-0 px-3 py-1 text-xs tracking-wider rounded-xl shadow-sm">
+            {recentTours.length}
+          </Badge>
+        </div>
+        <p className="text-gray-600 mb-8 max-w-2xl">
+          Explore our recently completed adventures and get inspired for your next trip.
         </p>
 
         {recentTours.length > 0 ? (
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
             {recentTours.map((tour) => (
-              <TourCard key={tour._id} tour={tour} />
+              <TourCard key={tour._id || tour.id} tour={tour} />
             ))}
           </div>
         ) : (
-          <div className="text-center py-12">
-            <p className="text-gray-500 text-lg">No recent tours available at the moment.</p>
-            <p className="text-gray-400 mt-2">Check out our available tours instead.</p>
-          </div>
+          <EmptySection
+            message="No recent tours available at the moment."
+            sub="Check out our available tours instead."
+          />
         )}
       </section>
 

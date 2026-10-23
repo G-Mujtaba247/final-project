@@ -4,6 +4,7 @@ const Home = lazy(() => import("@/pages/Home"))
 const About = lazy(() => import("@/pages/About"))
 const Contact = lazy(() => import("@/pages/Contact"))
 const Tours = lazy(() => import("./pages/Tours"))
+const TourDetails = lazy(() => import("./pages/TourDetails"))
 const Terms = lazy(() => import("./pages/safety/Terms"))
 const Policies = lazy(() => import("./pages/safety/Policies"))
 const FAQ = lazy(() => import("./components/FAQ"))
@@ -26,6 +27,7 @@ const App = () => {
           <Route path="/" element={<Home />} />
           <Route path="/about" element={<About />} />
           <Route path="/tours" element={<Tours />} />
+          <Route path="/tours/:slug" element={<TourDetails />} />
 
           {/* Protected Booking Routes */}
           <Route element={<ProtectedRoute />}>
