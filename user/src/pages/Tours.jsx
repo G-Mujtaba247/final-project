@@ -23,7 +23,6 @@ const Tour = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [statusFilter, setStatusFilter] = useState("all");
   const [sortBy, setSortBy] = useState("recommended");
-  const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const filteredTours = React.useMemo(() => {
@@ -71,7 +70,6 @@ const Tour = () => {
 
   const totalTours = tours.length;
   const availableToursCount = tours.filter((tour) => tour.status === "available").length;
-  const upcomingToursCount = tours.filter((tour) => tour.status === "upcoming").length;
   const recentToursCount = tours.filter((tour) => tour.status === "recent").length;
 
   const availableTours = filteredTours.filter((tour) => tour.status === "available");
@@ -145,7 +143,7 @@ const Tour = () => {
         <p className="text-center text-gray-600 mb-10 max-w-2xl mx-auto">
           Discover amazing destinations across Pakistan and book your next adventure with us.
         </p>
-        {error && <p role="alert" className="mb-6 rounded-xl bg-rose-50 p-4 text-center text-rose-700">{error}</p>}
+
 
         <div className="grid gap-6 lg:grid-cols-[1.8fr_1fr] mb-10">
           <div className="space-y-4">
