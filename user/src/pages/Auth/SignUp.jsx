@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import axios from "axios";
 import { Link, useNavigate } from "react-router";
 import { ArrowLeft, Mail, Lock, User, Eye, EyeOff } from "lucide-react";
-import { HOST } from "../../resources/server-API";
+import { HOST, REGISTER_USER } from "../../resources/server-API";
 
 const SignUp = () => {
   const navigate = useNavigate();
@@ -72,17 +72,32 @@ const SignUp = () => {
         password: formData.password
       };
 
-      const res = await axios.post(`${HOST}/user/register`, payload);
+      const res = await axios.post(REGISTER_USER, payload);
 
       if (res.data.status) {
         alert("Signup successful! Please login.");
         navigate("/login");
       } else {
-        setError(res.data.message);
+        setError(res.data.message || "Registration was not completed. Please try again.");
       }
     } catch (err) {
-      console.error(err);
-      setError("Registration failed. Please try again.");
+      const status = err.response?.status;
+      const serverMessage = err.response?.data?.message;
+
+      console.error("Registration request failed:", {
+        status,
+        code: err.code,
+      });
+
+      if (status === 404) {
+        setError("The registration service could not be found. Check the API URL and make sure the server is running.");
+      } else if (serverMessage) {
+        setError(serverMessage);
+      } else if (!err.response) {
+        setError("Could not reach the registration service. Make sure the API server is running and try again.");
+      } else {
+        setError(`Registration failed (HTTP ${status}). Please try again.`);
+      }
     } finally {
       setLoading(false);
     }
@@ -122,6 +137,8 @@ const SignUp = () => {
                   id="name"
                   name="name"
                   type="text"
+                  autoComplete="name"
+                  required
                   placeholder="Enter your full name"
                   className="w-full pr-4 py-2.5 border border-gray-300 rounded-r-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-[#ebf5fb]/50"
                   value={formData.name}
@@ -140,6 +157,8 @@ const SignUp = () => {
                   id="email"
                   name="email"
                   type="email"
+                  autoComplete="email"
+                  required
                   placeholder="name@example.com"
                   className="w-full pr-4 py-2.5 border border-gray-300 rounded-r-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-[#ebf5fb]/50"
                   value={formData.email}
@@ -159,6 +178,8 @@ const SignUp = () => {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   minLength={8}
+                  autoComplete="new-password"
+                  required
                   placeholder="••••••••"
                   className="w-full pr-10 py-2.5 border border-gray-300 rounded-r-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-[#ebf5fb]/50"
                   value={formData.password}
@@ -184,6 +205,8 @@ const SignUp = () => {
                   id="confirmPassword"
                   name="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
+                  autoComplete="new-password"
+                  required
                   placeholder="••••••••"
                   className="w-full pr-10 py-2.5 border border-gray-300 rounded-r-md focus:outline-none focus:ring-1 focus:ring-green-500 bg-[#ebf5fb]/50"
                   value={formData.confirmPassword}
