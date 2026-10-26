@@ -4,11 +4,9 @@ import Footer from "../components/Footer";
 
 const WebLayout = ({ children }) => {
   return (
-    <div className="min-h-screen flex flex-col bg-[radial-gradient(circle_at_top,_rgba(16,185,129,0.1),transparent_35%),radial-gradient(circle_at_bottom,_rgba(14,165,233,0.08),transparent_38%)]">
+    <div className="min-h-screen flex flex-col bg-background text-foreground">
       <Navbar />
-      <div className="flex-1">
-        {children}
-      </div>
+      <main className="flex-1 pt-20 md:pt-24">{children}</main>
       <Footer />
     </div>
   );

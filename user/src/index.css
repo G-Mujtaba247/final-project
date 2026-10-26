@@ -6,83 +6,98 @@
   --radius-md: 1rem;
   --radius-sm: 0.5rem;
 
-  /* Custom HSL Palette - Explore Pakistan */
-  --color-primary: hsl(158, 64%, 15%);
-  --color-primary-foreground: hsl(40, 20%, 98%);
-  
-  --color-secondary: hsl(145, 63%, 42%);
-  --color-secondary-foreground: hsl(0, 0%, 100%);
-
-  --color-accent: hsl(38, 75%, 55%);
-  --color-accent-foreground: hsl(158, 64%, 10%);
-
-  --color-background: hsl(40, 20%, 98%);
-  --color-foreground: hsl(158, 64% ,8%);
-  
-  --color-card: hsl(0, 0%, 100%);
-  --color-card-foreground: hsl(158, 64%, 8%);
-
-  --color-border: hsl(158, 20%, 90%);
-  --color-input: hsl(158, 20%, 90%);
-  --color-ring: hsl(145, 63%, 42%);
+  --color-primary: hsl(158 64% 15%);
+  --color-primary-foreground: hsl(40 20% 98%);
+  --color-secondary: hsl(145 63% 42%);
+  --color-secondary-foreground: hsl(0 0% 100%);
+  --color-accent: hsl(38 75% 55%);
+  --color-accent-foreground: hsl(158 64% 10%);
+  --color-background: hsl(40 20% 98%);
+  --color-foreground: hsl(158 64% 8%);
+  --color-card: hsl(0 0% 100%);
+  --color-card-foreground: hsl(158 64% 8%);
+  --color-border: hsl(158 20% 90%);
+  --color-input: hsl(158 20% 90%);
+  --color-ring: hsl(145 63% 42%);
 }
 
 @layer base {
   html {
     scroll-behavior: smooth;
-    font-family: 'Plus Jakarta Sans', sans-serif;
-  }
-
-  h1, h2, h3, h4, h5, h6 {
-    font-family: 'Outfit', sans-serif;
-    letter-spacing: -0.02em;
+    font-family: "Plus Jakarta Sans", "Segoe UI", sans-serif;
   }
 
   body {
     @apply bg-background text-foreground antialiased;
-    background-color: var(--color-background);
-    background-image: 
-      radial-gradient(circle at 15% 50%, hsla(145, 63%, 42%, 0.12), transparent 45%),
-      radial-gradient(circle at 85% 30%, hsla(158, 64%, 15%, 0.1), transparent 45%),
-      radial-gradient(circle at 50% 80%, hsla(38, 75%, 55%, 0.1), transparent 45%),
-      radial-gradient(circle at 80% 90%, hsla(145, 63%, 42%, 0.08), transparent 45%);
-    background-size: 150% 150%;
-    animation: ambient-gradient 20s ease-in-out infinite alternate;
-    background-attachment: fixed;
+    background: linear-gradient(180deg, rgba(13, 55, 45, 0.04), rgba(255,255,255,0) 30%),
+      radial-gradient(circle at top, rgba(31, 129, 88, 0.14), transparent 30%),
+      radial-gradient(circle at bottom right, rgba(229, 182, 79, 0.1), transparent 28%),
+      var(--color-background);
     min-height: 100vh;
   }
 
-  @keyframes ambient-gradient {
-    0% { background-position: 0% 0%; }
-    50% { background-position: 100% 100%; }
-    100% { background-position: 0% 100%; }
+  h1, h2, h3, h4, h5, h6 {
+    font-family: "Outfit", "Segoe UI", sans-serif;
+    letter-spacing: -0.03em;
+  }
+
+  img {
+    display: block;
+    max-width: 100%;
+  }
+
+  a {
+    text-decoration: none;
   }
 
   * {
     @apply border-border;
+    box-sizing: border-box;
   }
 
   ::selection {
     @apply bg-secondary/20 text-primary;
   }
+
+  html, body, #root {
+    min-height: 100%;
+    margin: 0;
+  }
+
+  section[id],
+  [id] {
+    scroll-margin-top: 6rem;
+  }
 }
 
 @layer utilities {
-  /* Modern Glassmorphism Cards */
   .glass-card {
-    background: rgba(255, 255, 255, 0.75);
+    background: rgba(255, 255, 255, 0.72);
     backdrop-filter: blur(16px);
     -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.4);
-    box-shadow: 0 8px 32px 0 rgba(14, 58, 47, 0.04);
+    border: 1px solid rgba(255, 255, 255, 0.5);
+    box-shadow: 0 12px 30px rgba(14, 58, 47, 0.08);
   }
 
-  /* Shimmer / Glow Effects */
   .glow-hover {
     transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   }
+
   .glow-hover:hover {
-    box-shadow: 0 0 25px rgba(39, 176, 110, 0.35);
     transform: translateY(-2px);
+    box-shadow: 0 16px 36px rgba(16, 185, 129, 0.18);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }

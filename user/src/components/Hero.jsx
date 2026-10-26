@@ -1,86 +1,77 @@
 import React from 'react';
 import { Button } from "./ui/button";
 import { useNavigate } from "react-router";
-import { Search, Compass } from "lucide-react";
+import { Search, Compass, ArrowRight } from "lucide-react";
 
 const Hero = () => {
   const navigate = useNavigate();
 
   return (
-    <div className="relative w-full min-h-[90vh] md:min-h-screen flex items-center justify-center overflow-hidden pt-20">
-      {/* Immersive Background Image with Multi-layered Overlay */}
-      <div className="absolute inset-0 z-0 scale-105 animate-[pulse_10s_ease-in-out_infinite]">
-        <img 
-          src="/image1.jpg" 
-          alt="Northern Pakistan Peaks" 
-          className="w-full h-full object-cover object-center"
+    <div className="relative flex min-h-[88vh] w-full items-center justify-center overflow-hidden">
+      <div className="absolute inset-0 z-0">
+        <img
+          src="/image1.jpg"
+          alt="Northern Pakistan mountains and valleys"
+          className="h-full w-full object-cover object-center"
           onError={(e) => {
             e.target.src = "https://images.unsplash.com/photo-1548013146-72479768bada?q=80&w=1200";
           }}
         />
-        {/* Multilayered Gradient: Top shade, bottom darkness for seamless layout integration */}
-        <div className="absolute inset-0 bg-gradient-to-b from-primary/80 via-primary/30 to-background"></div>
-        <div className="absolute inset-0 bg-gradient-to-r from-primary/45 to-transparent"></div>
+        <div className="absolute inset-0 bg-gradient-to-r from-primary/75 via-primary/45 to-primary/25" />
+        <div className="absolute inset-0 bg-gradient-to-t from-background via-primary/5 to-primary/20" />
       </div>
 
-      {/* Floating Sparkle Animation Elements */}
-      <div className="absolute top-1/4 left-10 w-24 h-24 bg-secondary/10 rounded-full blur-2xl animate-float"></div>
-      <div className="absolute bottom-1/4 right-20 w-32 h-32 bg-accent/10 rounded-full blur-3xl animate-float animate-delay-2000"></div>
+      <div className="absolute left-8 top-1/4 h-24 w-24 rounded-full bg-secondary/15 blur-3xl md:left-20" />
+      <div className="absolute bottom-20 right-10 h-40 w-40 rounded-full bg-accent/15 blur-3xl md:right-24" />
 
-      {/* Content Area */}
-      <div className="relative z-10 text-center px-4 max-w-5xl mx-auto flex flex-col items-center gap-8">
-        
-        {/* Dynamic Badge */}
-        <div className="inline-flex items-center gap-2 rounded-full bg-white/10 px-4 py-2 text-xs md:text-sm uppercase tracking-[0.2em] text-accent font-semibold border border-white/20 backdrop-blur-md animate-bounce">
-          <Compass className="w-4 h-4" />
+      <div className="relative z-10 mx-auto flex max-w-5xl flex-col items-center gap-8 px-4 text-center md:gap-10">
+        <div className="inline-flex items-center gap-2 rounded-full border border-white/20 bg-white/10 px-4 py-2 text-[10px] font-semibold uppercase tracking-[0.22em] text-accent backdrop-blur-md md:text-xs">
+          <Compass className="h-4 w-4" />
           The Ultimate Pakistani Odyssey
         </div>
 
-        {/* Dynamic Typography */}
-        <h1 className="text-4xl md:text-7xl font-extrabold text-white leading-[1.1] tracking-tight drop-shadow-xl">
-          Discover the Majesty of <br />
-          <span className="bg-gradient-to-r from-accent via-secondary to-white bg-clip-text text-transparent">
+        <h1 className="max-w-4xl text-4xl font-extrabold leading-[1.05] tracking-tight text-white drop-shadow-xl md:text-6xl lg:text-7xl">
+          Discover the Majesty of
+          <span className="mt-2 block bg-gradient-to-r from-amber-200 via-emerald-200 to-white bg-clip-text text-transparent">
             Pakistan's Wilderness
           </span>
         </h1>
 
-        <p className="text-base md:text-xl text-slate-100 max-w-3xl leading-relaxed drop-shadow-md">
-          From the historical monuments of Lahore to the cloud-kissing peaks of Swat, Hunza, and Murree. Plan and book premium adventures with local expert guides.
+        <p className="max-w-3xl text-base leading-relaxed text-slate-100 md:text-xl">
+          Experience the snow-capped peaks of Hunza, the lakes of Skardu, and the heritage of Lahore with handcrafted tours designed for modern explorers.
         </p>
 
-        {/* Action Controls */}
-        <div className="flex flex-col sm:flex-row gap-4 mt-4 w-full justify-center max-w-md">
-          <Button 
-            onClick={() => navigate("/tours")} 
-            className="bg-secondary hover:bg-secondary/95 text-white glow-hover px-8 py-7 text-base font-semibold rounded-2xl border-0 shadow-lg cursor-pointer"
+        <div className="flex w-full max-w-lg flex-col gap-4 sm:flex-row sm:justify-center">
+          <Button
+            onClick={() => navigate("/tours")}
+            className="h-14 rounded-2xl bg-secondary px-7 text-base font-semibold text-white shadow-xl shadow-emerald-900/20 transition hover:bg-secondary/90"
           >
-            <Search className="w-5 h-5 mr-2" /> Explore Packages
+            <Search className="mr-2 h-5 w-5" /> Explore Packages
           </Button>
-          <Button 
-            onClick={() => navigate("/about")}  
-            variant="outline" 
-            className="bg-white/10 text-white border-white/30 hover:bg-white/20 hover:text-white px-8 py-7 text-base font-semibold rounded-2xl backdrop-blur-md shadow-md transition-all cursor-pointer"
+          <Button
+            onClick={() => navigate("/about")}
+            variant="outline"
+            className="h-14 rounded-2xl border border-white/25 bg-white/10 px-7 text-base font-semibold text-white backdrop-blur-md transition hover:bg-white/15 hover:text-white"
           >
             Our Story
+            <ArrowRight className="ml-2 h-4 w-4" />
           </Button>
         </div>
 
-        {/* Elegant Glassmorphic Travel Stats Bar */}
-        <div className="mt-12 grid grid-cols-3 gap-4 md:gap-8 p-6 rounded-3xl glass-card text-slate-900 max-w-2xl w-full border border-white/10 shadow-2xl">
+        <div className="mt-4 grid w-full max-w-2xl grid-cols-3 gap-3 rounded-[28px] border border-white/10 bg-white/10 p-4 text-slate-900 shadow-2xl backdrop-blur-lg md:gap-6 md:p-6">
           <div className="text-center">
-            <h3 className="text-xl md:text-3xl font-extrabold text-primary">50+</h3>
-            <p className="text-xs uppercase tracking-wider text-slate-500 mt-1">Destinations</p>
+            <h3 className="text-xl font-extrabold text-white md:text-3xl">50+</h3>
+            <p className="mt-1 text-[10px] uppercase tracking-[0.16em] text-slate-200 md:text-xs">Destinations</p>
           </div>
-          <div className="border-x border-slate-200 text-center">
-            <h3 className="text-xl md:text-3xl font-extrabold text-primary">1,200+</h3>
-            <p className="text-xs uppercase tracking-wider text-slate-500 mt-1">Happy Tourists</p>
+          <div className="border-x border-white/15 text-center">
+            <h3 className="text-xl font-extrabold text-white md:text-3xl">1,200+</h3>
+            <p className="mt-1 text-[10px] uppercase tracking-[0.16em] text-slate-200 md:text-xs">Happy Travelers</p>
           </div>
           <div className="text-center">
-            <h3 className="text-xl md:text-3xl font-extrabold text-primary">4.9/5</h3>
-            <p className="text-xs uppercase tracking-wider text-slate-500 mt-1">Average Rating</p>
+            <h3 className="text-xl font-extrabold text-white md:text-3xl">4.9/5</h3>
+            <p className="mt-1 text-[10px] uppercase tracking-[0.16em] text-slate-200 md:text-xs">Average Rating</p>
           </div>
         </div>
-
       </div>
     </div>
   );

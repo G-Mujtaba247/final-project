@@ -1,5 +1,7 @@
 import { lazy, Suspense } from 'react'
 import { BrowserRouter, Routes, Route } from "react-router"
+import ScrollToTop from "./components/ScrollToTop"
+
 const Home = lazy(() => import("@/pages/Home"))
 const About = lazy(() => import("@/pages/About"))
 const Contact = lazy(() => import("@/pages/Contact"))
@@ -17,11 +19,10 @@ const ProtectedRoute = lazy(() => import("./components/ProtectedRoute"))
 const Page = lazy(() => import("./pages/Page"))
 const Profile = lazy(() => import("./pages/Profile"))
 
-
-
 const App = () => {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Suspense fallback={<div className="p-8 text-center">Loading page...</div>}>
         <Routes>
           <Route path="/" element={<Home />} />
@@ -46,7 +47,6 @@ const App = () => {
 
           {/* Dynamic Pages */}
           <Route path="/:slug" element={<Page />} />
-
         </Routes>
       </Suspense>
     </BrowserRouter>
